@@ -27,6 +27,7 @@ int main() {
         for (int j = 0; j < FIELD_SIZE; j++) {
             field[i][j] = ' '; // клетка поля пустая
         }
+         cout << "Hello world!";
     }
 
     // инициализация кораблей
