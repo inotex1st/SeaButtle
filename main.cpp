@@ -13,6 +13,13 @@ int shipsX[NUM_SHIPS]; // координаты кораблей на поле
 int shipsY[NUM_SHIPS]; // координаты кораблей на поле
 bool shipsVertical[NUM_SHIPS]; // направление кораблей
 
+//функция выстрела
+void shoot (int &x, int &y) {
+    x = rand() % FIELD_SIZE;
+    y = rand() % FIELD_SIZE;
+}
+
+
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     cout << "Приветствую вас в игре морской бой \n";
@@ -58,7 +65,60 @@ int main() {
         cout << endl;
     }
 
-    return 0;
+    int hits = 0;
+    while (hits < TOTAL_SHIP_CELLS) {
+        int x, y;
+        shoot(x, y);
+        if ((field[y][x] == 'H') || (field[y][x] == 'X')) {
+            continue;
+        }
+        bool hit = false;
+        for (int i = 0; i < NUM_SHIPS; i++) {
+            if ((x >= shipsX[i]) && (y >= shipsY[i]) &&
+                (x < shipsX[i] + shipsSizes[i]) && (y < shipsY[i] + shipsSizes[i])) {
+                hit = true;
+                break;
+            }
+        }
+        if (hit) {
+            field[y][x] = 'X';
+            hits++;
+            cout << endl << "Попадание!" << endl;
+        }
+        else {
+            field[y][x] = 'O';
+            cout << endl << "Промах!" << endl;
+        }
+    }
+    cout << endl << "Вы победили!" << endl;
 
 }
 
+//функция выстрела
+void shoot (int &x, int &y) {
+    x = rand() % FIELD_SIZE;
+    y = rand() % FIELD_SIZE;
+}
+
+//проверка расположения корабля
+bool checkOverlap(int x, int y, int size, bool vertical) {
+    if ((x + size > FIELD_SIZE) || (y + size > FIELD_SIZE))
+        return true;
+
+    for (int i = y - 1; i <= y + size; i++) {
+        for (int j = x - 1; j <= x + 1; j++) {
+            if ((i >= 0) && (j >= 0) && (i < FIELD_SIZE) && (j < FIELD_SIZE)) {
+                if (field[i][j] == 'H')
+                    return true;
+            }
+        }
+    }
+
+    for (int i = 0; i < size; i++) {
+        if (vertical)
+            field[y + i][x] = 'H';
+        else
+            field[y][x + i] = 'H';
+    }
+    return false;
+}
