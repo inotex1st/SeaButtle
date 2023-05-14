@@ -1,6 +1,6 @@
 #include <iostream>
 #include <windows.h>
-#include <stdlib.h>
+#include <cstdlib>
 using namespace std;
 
 const int FIELD_SIZE = 10; // размерность игрового поля
